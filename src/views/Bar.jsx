@@ -1,12 +1,12 @@
 import PropTypes from "prop-types";
 
-const Bar = ({height, width}) =>
+const Bar = ({height, width, color}) =>
 {
     return (
         <div style={{
             height: `${height}`,
             width: `${width}`,
-            backgroundColor: "#d2c2b0",
+            backgroundColor: `${color}`,
             borderTopLeftRadius: "2px",
             borderTopRightRadius: "2px",
             marginRight: "2px",

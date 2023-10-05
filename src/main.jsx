@@ -7,11 +7,14 @@ import { Provider } from 'react-redux';
 
 import './scss/styles.scss';
 import * as bootstrap from 'bootstrap';
+import {SortingContextProvider} from "./contexts/SortingContextProvider.jsx";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
       <Provider store={store}>
-          <RouterProvider router={router} />
+          <SortingContextProvider>
+              <RouterProvider router={router} />
+          </SortingContextProvider>
       </Provider>
   </React.StrictMode>,
 )

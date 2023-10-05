@@ -5,8 +5,10 @@ export const ArraySortSlice = createSlice({
     initialState: {
         value: [],
         size: '75',
+        speed: 100,
         width: '0',
-        sorting: false,
+        status: 'waiting',
+        index: 0,
     },
     reducers: {
         create: (state) =>
@@ -18,7 +20,7 @@ export const ArraySortSlice = createSlice({
             {
                 let h = Math.floor(Math.random() * (70 - 6) + 5);
 
-                bars.push({height: h, width: w});
+                bars.push({height: h, width: w, color: "#a6a6a6"});
             }
 
             state.value = [...bars];
@@ -31,18 +33,32 @@ export const ArraySortSlice = createSlice({
         {
             state.size = action.payload;
         },
+        setSpeed: (state, action) =>
+        {
+            state.speed = action.payload;
+        },
         width: (state, action) =>
         {
             state.width = action.payload;
         },
-        sorting: (state, action) =>
+        setStatus: (state, action) =>
         {
-            state.sorting = action.payload;
+            state.status = action.payload;
+        },
+        updateIndex: (state) =>
+        {
+            state.index++;
+        },
+        reset: (state) =>
+        {
+            state.index = 0;
+
+            this.create();
         },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { update, create, size, width, sorting } = ArraySortSlice.actions
+export const { update, create, size, setSpeed, width, setStatus, updateIndex, reset } = ArraySortSlice.actions
 
 export default ArraySortSlice.reducer

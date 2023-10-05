@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
 
+$primary: #615475;
+$secondary: #a6a6a6;
+$card-border-width: 0;
+$card-border-radius: 0.7rem;
+$btn-border-radius: 0.7rem;
+
 @import '~bootstrap/scss/bootstrap.scss';
 @import '~bootstrap/scss/_variables.scss';
 @import '~bootstrap/scss/_functions.scss';
@@ -8,4 +14,20 @@ body
 {
   font-family: 'Inter', sans-serif;
   font-weight: 400;
+}
+
+.nav-span
+{
+  display: none;
+  position: absolute;
+  height: 0.5rem;
+  width: 0.5rem;
+  border-radius: 50%;
+  bottom: -0.3rem;
+  left: 50%;
+}
+
+.nav-link.active > .nav-span
+{
+  display: block;
 }

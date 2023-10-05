@@ -1,62 +1,71 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faBolt} from "@fortawesome/free-solid-svg-icons";
+import {faCubesStacked} from "@fortawesome/free-solid-svg-icons";
 import {Bar} from "./Views.js";
 import {Sorting} from "../components/Components.js";
 import {useSortingContext} from "../contexts/SortingContextProvider.jsx";
 
-let part = {value: 0};
-
-const Quick = () =>
+const Heap = () =>
 {
     const {size, speed, bars} = useSortingContext();
 
-    async function* partition(array, low, high)
+    async function* heap(array, size, i)
     {
-        let pivot = array[high];
-        let i = low - 1;
+        let max = i;
+        let left = 2 * i + 1;
+        let right = 2 * i + 2;
 
-        for (let j = low; j <= high - 1; j++)
+        if (left < size && array[left].height > array[max].height)
         {
-            if (array[j].height < pivot.height)
-            {
-                i++;
-
-                let temp = array[i];
-                array[i] = array[j];
-                array[j] = temp;
-
-                yield array;
-            }
+            max = left;
         }
 
-        let temp = array[i + 1];
-        array[i + 1] = array[high];
-        array[high] = temp;
-
-        part.value = i + 1;
-    }
-
-    async function* sort(array, low = 0, high = size - 1)
-    {
-        if (low < high)
+        if (right < size && array[right].height > array[max].height)
         {
-            let swaps = partition(array, low, high);
+            max = right;
+        }
+
+        if (max !== i)
+        {
+            let temp = array[i];
+            array[i] = array[max];
+            array[max] = temp;
+
+            let swaps = heap(array, size, max);
             for await (const swap of swaps)
             {
                 await new Promise((resolve) => setTimeout(resolve, speed));
                 yield swap;
             }
+        }
 
-            let lows = sort(array, low, part.value - 1);
-            for await (const low of lows)
+        yield array;
+    }
+
+    async function* sort(array)
+    {
+        let size = array.length;
+
+        for (let i = Math.floor(size / 2) - 1; i >= 0; i--)
+        {
+            let swaps = heap(array, size, i);
+            for await (const swap of swaps)
             {
-                yield low;
+                await new Promise((resolve) => setTimeout(resolve, speed));
+                yield swap;
             }
+        }
 
-            let highs = sort(array, part.value + 1, high);
-            for await (const high of highs)
+        for (let i = size - 1; i > 0; i--)
+        {
+            let temp = array[0];
+            array[0] = array[i];
+            array[i] = temp;
+
+            let swaps = heap(array, i, 0);
+            for await (const swap of swaps)
             {
-                yield high;
+                await new Promise((resolve) => setTimeout(resolve, speed));
+                yield swap;
             }
         }
     }
@@ -69,8 +78,8 @@ const Quick = () =>
                         <div className="card-header bg-light">
                             <div className="hstack">
                                 <div>
-                                    <FontAwesomeIcon icon={faBolt} style={{marginRight: "5px"}} />
-                                    <strong>Quick Sort</strong>
+                                    <FontAwesomeIcon icon={faCubesStacked} style={{marginRight: "5px"}} />
+                                    <strong>Heap Sort</strong>
                                 </div>
                                 <div className="ms-auto">{size} elements</div>
                             </div>
@@ -85,4 +94,4 @@ const Quick = () =>
     )
 }
 
-export default Quick;
+export default Heap;
